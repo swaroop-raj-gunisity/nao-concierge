@@ -1,0 +1,227 @@
+{
+  "scenario_id": "seed-inflight-001",
+  "scenario_status": "IN_PROGRESS",
+  "catalog_version": "nao-cat-2026.09.1",
+  "last_completed_group": "investment_profile",
+  "next_expected_group": "regulatory",
+  "account": {
+    "type": "INDIVIDUAL",
+    "advisory_program": "UMA",
+    "purpose": "RETIREMENT"
+  },
+  "applicant": {
+    "legal_name": {
+      "first": "Jason",
+      "middle": null,
+      "last": "Whitfield",
+      "suffix": null
+    },
+    "date_of_birth": "1978-02-27",
+    "tax_id": "***-**-1190",
+    "citizenship_status": "US_CITIZEN",
+    "legal_address": {
+      "line1": "48 Aldergate Ln",
+      "line2": "Apt 3B",
+      "city": "Austin",
+      "state": "TX",
+      "postal_code": "78701",
+      "country": "USA"
+    },
+    "email": "jason.whitfield@example.com",
+    "mobile_phone": "+1-512-555-0163"
+  },
+  "employment": {
+    "status": "SELF_EMPLOYED",
+    "employer_name": "Whitfield Design Studio"
+  },
+  "financial": {
+    "annual_income": "100K_250K",
+    "liquid_net_worth": null
+  },
+  "household": {
+    "dependants": null,
+    "minor_dependants": null
+  },
+  "profile": {
+    "investment_objective": "GROWTH",
+    "risk_tolerance": "MOD_AGGRESSIVE",
+    "time_horizon": null
+  },
+  "reg": {
+    "finra_affiliation": null,
+    "control_person": null
+  },
+  "trusted_contact": null,
+  "funding": null,
+  "disclosure": {
+    "form_crs_ack": {
+      "acknowledged": false,
+      "acknowledged_at": null
+    },
+    "advisory_agreement_ack": {
+      "acknowledged": false,
+      "acknowledged_at": null
+    }
+  },
+  "_completeness": "applicant_identity, employment_finances (partial), and investment_profile (partial) groups are underway. financial.liquid_net_worth and profile.time_horizon started but not yet answered. regulatory, trusted_contact, funding, and disclosures groups not yet reached. Represents a realistic mid-session resume point.",
+  "capture_status": {
+    "account_setup": {
+      "account.type": {
+        "state": "confirmed",
+        "source": "advisor",
+        "confirmed_at": "2026-09-18T09:00:00Z"
+      },
+      "account.advisory_program": {
+        "state": "confirmed",
+        "source": "advisor",
+        "confirmed_at": "2026-09-18T09:00:00Z"
+      },
+      "account.purpose": {
+        "state": "confirmed",
+        "source": "advisor",
+        "confirmed_at": "2026-09-18T09:00:05Z"
+      }
+    },
+    "applicant_identity": {
+      "applicant.legal_name": {
+        "state": "confirmed",
+        "source": "applicant",
+        "confirmed_at": "2026-09-18T09:05:00Z"
+      },
+      "applicant.date_of_birth": {
+        "state": "confirmed",
+        "source": "applicant",
+        "confirmed_at": "2026-09-18T09:05:00Z"
+      },
+      "applicant.tax_id": {
+        "state": "confirmed",
+        "source": "applicant",
+        "confirmed_at": "2026-09-18T09:05:30Z"
+      },
+      "applicant.citizenship_status": {
+        "state": "confirmed",
+        "source": "applicant",
+        "confirmed_at": "2026-09-18T09:05:40Z"
+      },
+      "applicant.legal_address": {
+        "state": "confirmed",
+        "source": "applicant",
+        "confirmed_at": "2026-09-18T09:06:10Z"
+      },
+      "applicant.email": {
+        "state": "confirmed",
+        "source": "applicant",
+        "confirmed_at": "2026-09-18T09:06:15Z"
+      },
+      "applicant.mobile_phone": {
+        "state": "confirmed",
+        "source": "applicant",
+        "confirmed_at": "2026-09-18T09:06:20Z"
+      }
+    },
+    "employment_finances": {
+      "employment.status": {
+        "state": "confirmed",
+        "source": "applicant",
+        "confirmed_at": "2026-09-18T09:08:00Z"
+      },
+      "employment.employer_name": {
+        "state": "confirmed",
+        "source": "applicant",
+        "confirmed_at": "2026-09-18T09:08:10Z"
+      },
+      "financial.annual_income": {
+        "state": "confirmed",
+        "source": "applicant",
+        "confirmed_at": "2026-09-18T09:09:00Z"
+      },
+      "financial.liquid_net_worth": {
+        "state": "not_started",
+        "source": null,
+        "confirmed_at": null
+      }
+    },
+    "household": {
+      "household.dependants": {
+        "state": "not_started",
+        "source": null,
+        "confirmed_at": null
+      },
+      "household.minor_dependants": {
+        "state": "not_started",
+        "source": null,
+        "confirmed_at": null
+      }
+    },
+    "investment_profile": {
+      "profile.investment_objective": {
+        "state": "confirmed",
+        "source": "applicant",
+        "confirmed_at": "2026-09-18T09:11:00Z"
+      },
+      "profile.risk_tolerance": {
+        "state": "pending_confirmation",
+        "source": "applicant",
+        "confirmed_at": null
+      },
+      "profile.time_horizon": {
+        "state": "not_started",
+        "source": null,
+        "confirmed_at": null
+      }
+    },
+    "regulatory": {
+      "reg.finra_affiliation": {
+        "state": "not_started",
+        "source": null,
+        "confirmed_at": null
+      },
+      "reg.control_person": {
+        "state": "not_started",
+        "source": null,
+        "confirmed_at": null
+      }
+    },
+    "trusted_contact": {
+      "trusted_contact": {
+        "state": "not_started",
+        "source": null,
+        "confirmed_at": null
+      }
+    },
+    "funding": {
+      "funding.method": {
+        "state": "not_started",
+        "source": null,
+        "confirmed_at": null
+      },
+      "funding.initial_amount": {
+        "state": "not_started",
+        "source": null,
+        "confirmed_at": null
+      },
+      "funding.delivering_institution": {
+        "state": "not_started",
+        "source": null,
+        "confirmed_at": null
+      }
+    },
+    "disclosures": {
+      "disclosure.form_crs_ack": {
+        "state": "not_started",
+        "source": null,
+        "confirmed_at": null
+      },
+      "disclosure.advisory_agreement_ack": {
+        "state": "not_started",
+        "source": null,
+        "confirmed_at": null
+      }
+    }
+  },
+  "resume_pointer": {
+    "resume_at_attribute": "profile.risk_tolerance",
+    "reason": "captured but not yet shown/confirmed by applicant in preview at time of pause",
+    "next_unstarted_attribute": "profile.time_horizon"
+  }
+}

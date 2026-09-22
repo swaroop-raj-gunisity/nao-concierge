@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAO Concierge — Conversational Intake Implementation Plan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #F4F6FA;
+  --surface: #FFFFFF;
+  --surface-alt: #EAEFF7;
+  --surface-card: #FFFFFF;
+  --text: #131E36;
+  --text-secondary: #4A5A78;
+  --text-muted: #7E8DA6;
+  --border: #D3DCE8;
+  --border-light: #E7EDF5;
+  --accent: #E83908;
+  --accent-light: #E8390815;
+  --blue: #0284C7;
+  --blue-light: #0284C715;
+  --green: #10B981;
+  --green-light: #10B98115;
+  --amber: #F59E0B;
+  --amber-light: #F59E0B15;
+  --purple: #8B5CF6;
+  --purple-light: #8B5CF615;
+  --shadow: 0 2px 6px rgba(19, 30, 54, 0.05), 0 1px 3px rgba(19, 30, 54, 0.03);
+  --shadow-lg: 0 10px 25px rgba(19, 30, 54, 0.08), 0 4px 10px rgba(19, 30, 54, 0.04);
+  --radius: 12px;
+  --radius-sm: 6px;
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Source Sans 3', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme="dark"] {
+  --bg: #0B111E;
+  --surface: #131D31;
+  --surface-alt: #1B2844;
+  --surface-card: #142038;
+  --text: #E5ECF6;
+  --text-secondary: #9DB0CC;
+  --text-muted: #667A99;
+  --border: #233352;
+  --border-light: #1A2842;
+  --accent: #FF5E36;
+  --accent-light: #FF5E3625;
+  --blue: #38BDF8;
+  --blue-light: #38BDF820;
+  --green: #34D399;
+  --green-light: #34D39920;
+  --amber: #FBBF24;
+  --amber-light: #FBBF2420;
+  --purple: #A78BFA;
+  --purple-light: #A78BFA20;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  transition: background 0.25s, color 0.25s;
+}
+
+/* Header & Sticky Nav */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), #f97316);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 12px rgba(232, 57, 8, 0.3);
+}
+.logo-text h1 {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.logo-text p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--accent); }
+.theme-btn {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.theme-btn:hover { background: var(--border); }
+
+/* Main Container */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+.hero h2 {
+  font-family: var(--font-heading);
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.hero p.lead {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 880px;
+  margin-bottom: 24px;
+}
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+.stat-val {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.stat-val.accent { color: var(--accent); }
+.stat-val.blue { color: var(--blue); }
+.stat-val.green { color: var(--green); }
+.stat-lbl {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Section Common */
+.section {
+  margin-bottom: 48px;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border);
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+}
+.section-title h3 {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Strategic Decisions Callouts */
+.decisions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 28px;
+}
+.decision-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.decision-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+.d-badge {
+  align-self: flex-start;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+.d-badge.env { background: var(--green-light); color: var(--green); }
+.d-badge.orch { background: var(--blue-light); color: var(--blue); }
+.d-badge.scope { background: var(--purple-light); color: var(--purple); }
+.d-badge.creds { background: var(--amber-light); color: var(--amber); }
+
+.decision-card h4 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+.decision-card p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+.decision-summary {
+  background: var(--surface-alt);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  border-left: 3px solid var(--accent);
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Architecture Visualizer */
+.arch-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+.arch-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+@media (max-width: 900px) { .arch-grid { grid-template-columns: 1fr; } }
+.arch-col {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+.arch-col-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.arch-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+}
+.arch-item-name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+.arch-item-role {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+.arch-item-tag {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  background: var(--surface-alt);
+  color: var(--text-secondary);
+}
+
+/* Team Grid */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+@media (max-width: 1000px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .team-grid { grid-template-columns: 1fr; } }
+.member-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.member-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+.avatar.sa { background: var(--accent); }
+.avatar.vi { background: var(--blue); }
+.avatar.je { background: #6C63AC; }
+.avatar.sm { background: #0D9488; }
+.member-info h4 {
+  font-family: var(--font-heading);
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.member-info .role {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+.fde-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-light);
+  color: var(--accent);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: var(--font-heading);
+  font-size: 0.76rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.track-tag {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--surface-alt);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+.member-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  flex-grow: 1;
+}
+
+/* Filter Controls */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+  border-radius: 10px;
+}
+.filter-label {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+.filter-btn {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.filter-btn:hover { background: var(--border); color: var(--text); }
+.filter-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* Day-by-Day Cards */
+.timeline-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.day-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.day-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-lg);
+}
+.day-header {
+  background: var(--surface-alt);
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.day-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.day-badge {
+  background: var(--text);
+  color: var(--surface);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 3px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+.day-name {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.day-phase {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+.day-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.owner-chip {
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.owner-chip.sa { background: var(--accent-light); color: var(--accent); }
+.owner-chip.vi { background: var(--blue-light); color: var(--blue); }
+.owner-chip.je { background: var(--purple-light); color: var(--purple); }
+.owner-chip.sm { background: var(--green-light); color: var(--green); }
+.owner-chip.all { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+
+.day-body {
+  padding: 18px 20px;
+}
+.day-task-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 800px) { .day-task-grid { grid-template-columns: 1fr; } }
+.task-list {
+  list-style: none;
+}
+.task-item {
+  padding: 6px 0;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.45;
+}
+.task-bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+.deliverable-box {
+  background: var(--surface-alt);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.deliv-label {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.deliv-text {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.ratio-bar-wrap {
+  margin-top: 6px;
+}
+.ratio-lbl {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+  font-family: var(--font-mono);
+}
+.ratio-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+}
+.ratio-claude {
+  background: var(--accent);
+  height: 100%;
+}
+.ratio-human {
+  background: var(--text-muted);
+  height: 100%;
+}
+
+/* Specs & Catalog Tables */
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+.spec-table th {
+  background: var(--surface-alt);
+  padding: 10px 14px;
+  text-align: left;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+.spec-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.86rem;
+}
+.spec-table tr:last-child td { border-bottom: none; }
+.spec-table td.code {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--blue);
+  font-weight: 500;
+}
+.pii-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: var(--font-heading);
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+.pii-tag.none { background: var(--surface-alt); color: var(--text-muted); }
+.pii-tag.indirect { background: var(--blue-light); color: var(--blue); }
+.pii-tag.direct { background: var(--amber-light); color: var(--amber); }
+.pii-tag.sensitive { background: var(--accent-light); color: var(--accent); }
+
+/* Quality Gates Checklist */
+.gates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.gate-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 12px;
+}
+.gate-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+.gate-content h4 {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.gate-content p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+/* Footer */
+footer {
+  margin-top: 60px;
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-icon">NC</div>
+      <div class="logo-text">
+        <h1>NAO Concierge · Conversational Intake</h1>
+        <p>2-Week Prototyping Roadmap · Plan 1 Tech Stack (.NET 8 + React)</p>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a href="#decisions">Decisions</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#team">Team & FDE</a>
+      <a href="#schedule">2-Week Schedule</a>
+      <a href="#specifications">Technical Specs</a>
+      <a href="#gates">Quality Gates</a>
+      <button class="theme-btn" onclick="toggleTheme()">
+        <span id="theme-icon">🌙</span> <span id="theme-text">Dark</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-tag">⚡ Forward Deployment Engineer (FDE) Plan</div>
+    <h2>Conversational Intake Sprint: 2-Week Blueprint</h2>
+    <p class="lead">
+      End-to-end technical plan for delivering the <strong>Conversational Intake</strong> capability of the New Account Onboarding (NAO) Concierge. Built on <strong>ASP.NET Core 8 Web API</strong> and <strong>React 18</strong>, orchestrated with <strong>Semantic Kernel</strong> connected to an employer-hosted <strong>Portkey</strong> gateway, with a deterministic 4-tier <strong>Redaction Gate</strong> and dual retrieval CRM RAG pipeline.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-val accent">2 Weeks</div>
+        <div class="stat-lbl">Delivery Window (10 Days)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val blue">60% Avg</div>
+        <div class="stat-lbl">Claude Code Agent Share</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val green">14 Attr</div>
+        <div class="stat-lbl">Inferable Form Attributes</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">100% Zero PII</div>
+        <div class="stat-lbl">Deterministic Masking Gate</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Strategic Decisions Callouts -->
+  <section class="section" id="decisions">
+    <div class="section-header">
+      <div class="section-title">
+        <div class="section-icon">⚙️</div>
+        <h3>Strategic Architectural Decisions</h3>
+      </div>
+    </div>
+    <div class="decisions-grid">
+      <div class="decision-card">
+        <span class="d-badge env">Target Environment</span>
+        <h4>Hybrid Local-First Dev, Cloud-First Verify</h4>
+        <p>Develop on local SQLite + in-memory vector store + Portkey gateway during Days 1–7 to circumvent Azure free-tier quota lockouts (AI Search 50MB limit, Cosmos 1000 RU/s). Verify against personal Azure trial / employer sandbox in Days 8–10 via .NET provider abstractions.</p>
+        <div class="decision-summary">Zero code changes: switch database and vector providers via environment variables.</div>
+      </div>
+      <div class="decision-card">
+        <span class="d-badge orch">Orchestration</span>
+        <h4>.NET 8 Semantic Kernel with Portkey</h4>
+        <p>Adopt Microsoft Semantic Kernel in C# directly inside the ASP.NET Core 8 Web API. Plugs seamlessly into the employer-hosted Portkey LLM gateway using an OpenAI/Anthropic-compatible client. Avoids introducing an unneeded Python sidecar.</p>
+        <div class="decision-summary">100% alignment with team's deep C# background (Saravanan, Jegan, Smita).</div>
+      </div>
+      <div class="decision-card">
+        <span class="d-badge scope">Feature Scope</span>
+        <h4>Strictly Conversational Intake</h4>
+        <p>Focus exclusively on the Conversational Intake pillar: CRM-assisted start, meeting notes extraction, clarifying questions below the 0.70 confidence floor, and value correction with downstream conflict checking. Stubs only for later pillars.</p>
+        <div class="decision-summary">14 inferable attributes across Individual and Joint WROS registrations.</div>
+      </div>
+      <div class="decision-card">
+        <span class="d-badge creds">LLM Credentials</span>
+        <h4>Employer-Hosted Portkey Gateway</h4>
+        <p>Utilize the existing employer-hosted Portkey gateway with configurable model routing behind the scenes. Stored in local environment via <code>dotnet user-secrets</code>, transitioning to Azure Key Vault for cloud staging.</p>
+        <div class="decision-summary">Centralized model routing, fallbacks, telemetry, and rate-limit buffering.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Component Map & Architecture -->
+  <section class="section" id="architecture">
+    <div class="section-header">
+      <div class="section-title">
+        <div class="section-icon">🏗️</div>
+        <h3>Plan 1 Architecture & Component Map</h3>
+      </div>
+    </div>
+    <div class="arch-box">
+      <div class="arch-grid">
+        <div class="arch-col">
+          <div class="arch-col-title">🖥️ Frontend Layer</div>
+          <div class="arch-item">
+            <div class="arch-item-name">React 18 + Vite + TS</div>
+            <div class="arch-item-role">Split-screen application shell</div>
+            <span class="arch-item-tag">Static Web Apps</span>
+          </div>
+          <div class="arch-item">
+            <div class="arch-item-name">EventSource (SSE)</div>
+            <div class="arch-item-role">Streaming chat completion client</div>
+            <span class="arch-item-tag">Realtime Stream</span>
+          </div>
+          <div class="arch-item">
+            <div class="arch-item-name">Confirmation Ledger UI</div>
+            <div class="arch-item-role">Confirm / Edit / Reject controls</div>
+            <span class="arch-item-tag">Proposal Approval</span>
+          </div>
+        </div>
+
+        <div class="arch-col">
+          <div class="arch-col-title">⚡ API & Boundary</div>
+          <div class="arch-item">
+            <div class="arch-item-name">ASP.NET Core 8 Web API</div>
+            <div class="arch-item-role">REST + SSE endpoints</div>
+            <span class="arch-item-tag">Container Apps</span>
+          </div>
+          <div class="arch-item">
+            <div class="arch-item-name">Redaction Gate (.NET)</div>
+            <div class="arch-item-role">Deterministic 4-tier PII filter</div>
+            <span class="arch-item-tag">Zero PII Leak</span>
+          </div>
+          <div class="arch-item">
+            <div class="arch-item-name">Audit Trail API</div>
+            <div class="arch-item-role">Event logger & compliance query</div>
+            <span class="arch-item-tag">Audit Lineage</span>
+          </div>
+        </div>
+
+        <div class="arch-col">
+          <div class="arch-col-title">🧠 AI Orchestration</div>
+          <div class="arch-item">
+            <div class="arch-item-name">Semantic Kernel (.NET)</div>
+            <div class="arch-item-role">Prompt planner & tool caller</div>
+            <span class="arch-item-tag">Custom Portkey Connector</span>
+          </div>
+          <div class="arch-item">
+            <div class="arch-item-name">Confidence Floor (0.70)</div>
+            <div class="arch-item-role">Clarification branching engine</div>
+            <span class="arch-item-tag">Hallucination Gate</span>
+          </div>
+          <div class="arch-item">
+            <div class="arch-item-name">MCP Middleware Tools</div>
+            <div class="arch-item-role">Extract, Propose, Cross-Check</div>
+            <span class="arch-item-tag">C# Native Tools</span>
+          </div>
+        </div>
+
+        <div class="arch-col">
+          <div class="arch-col-title">💾 Storage & RAG</div>
+          <div class="arch-item">
+            <div class="arch-item-name">Cosmos DB / SQLite</div>
+            <div class="arch-item-role">Session & Case persistence</div>
+            <span class="arch-item-tag">Dual Provider</span>
+          </div>
+          <div class="arch-item">
+            <div class="arch-item-name">AI Search / Qdrant</div>
+            <div class="arch-item-role">CRM Lead & Note RAG index</div>
+            <span class="arch-item-tag">Hybrid Search</span>
+          </div>
+          <div class="arch-item">
+            <div class="arch-item-name">text-embedding-3-small</div>
+            <div class="arch-item-role">CRM Chunk Vector Embeddings</div>
+            <span class="arch-item-tag">1536 Dimensions</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Allocation & FDE Model -->
+  <section class="section" id="team">
+    <div class="section-header">
+      <div class="section-title">
+        <div class="section-icon">👥</div>
+        <h3>Team Skills Matrix & FDE Track Allotment</h3>
+      </div>
+    </div>
+    <div class="team-grid">
+      <div class="member-card">
+        <div class="member-header">
+          <div class="avatar sa">SA</div>
+          <div class="member-info">
+            <h4>Saravanan</h4>
+            <div class="role">Lead Technical Consultant · 12+ yrs</div>
+          </div>
+        </div>
+        <span class="track-tag">AI Orchestration & Backend Lead</span>
+        <div class="fde-badge">🤖 60% Claude / 40% Human</div>
+        <p class="member-desc">Leads ASP.NET Core 8 architecture, Semantic Kernel integration with Portkey, prompt engineering, Deterministic Redaction Gate, Confidence Floor logic, and MCP tool endpoints.</p>
+      </div>
+
+      <div class="member-card">
+        <div class="member-header">
+          <div class="avatar vi">VI</div>
+          <div class="member-info">
+            <h4>Vinisha Ravishankar</h4>
+            <div class="role">Lead Technical Consultant · 11+ yrs</div>
+          </div>
+        </div>
+        <span class="track-tag">Frontend Architecture Lead</span>
+        <div class="fde-badge">🤖 60% Claude / 40% Human</div>
+        <p class="member-desc">Leads React 18 + Vite + TS split-screen interface, SSE chat streaming hook, Confirmation Ledger components (Confirm/Edit/Reject), citation line badges, and form synchronization.</p>
+      </div>
+
+      <div class="member-card">
+        <div class="member-header">
+          <div class="avatar je">JE</div>
+          <div class="member-info">
+            <h4>Jegan Rajasekar</h4>
+            <div class="role">Sr. Technical Consultant · 10+ yrs</div>
+          </div>
+        </div>
+        <span class="track-tag">Persistence & State Lead (w/ SA)</span>
+        <div class="fde-badge">🤖 50% Claude / 50% Human</div>
+        <p class="member-desc">Leads Cosmos DB & SQLite fallback schemas, Case and Session state CRUD endpoints, attribute state transition engine, submission blocking rules, and data model xUnit test suite.</p>
+      </div>
+
+      <div class="member-card">
+        <div class="member-header">
+          <div class="avatar sm">SM</div>
+          <div class="member-info">
+            <h4>Smita Dutt</h4>
+            <div class="role">Technical Lead · 14+ yrs</div>
+          </div>
+        </div>
+        <span class="track-tag">Data & RAG Pipeline Lead</span>
+        <div class="fde-badge">🤖 60% Claude / 40% Human</div>
+        <p class="member-desc">Leads CRM seed data ingestion (Leads + Notes), agnostic chunking and vector indexing in AI Search/Qdrant, Audit Trail schema and event APIs, and Golden Dataset curation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive 2-Week Schedule -->
+  <section class="section" id="schedule">
+    <div class="section-header">
+      <div class="section-title">
+        <div class="section-icon">📅</div>
+        <h3>2-Week Day-by-Day Implementation Roadmap</h3>
+      </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="filter-bar">
+      <span class="filter-label">Filter Track:</span>
+      <button class="filter-btn active" onclick="filterTrack('all')">All Tracks (10 Days)</button>
+      <button class="filter-btn" onclick="filterTrack('sa')">Saravanan (AI/Backend)</button>
+      <button class="filter-btn" onclick="filterTrack('vi')">Vinisha (Frontend)</button>
+      <button class="filter-btn" onclick="filterTrack('je')">Jegan (Persistence)</button>
+      <button class="filter-btn" onclick="filterTrack('sm')">Smita (Data/RAG)</button>
+    </div>
+
+    <div class="timeline-grid">
+      <!-- Day 1 -->
+      <div class="day-card" data-owner="all sa vi je sm">
+        <div class="day-header">
+          <div class="day-title-group">
+            <span class="day-badge">Day 1</span>
+            <span class="day-name">Project Scaffolding & Repository Setup</span>
+            <span class="day-phase">Lifecycle: P2 Intake</span>
+          </div>
+          <div class="day-meta">
+            <span class="owner-chip all">All Team</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="day-task-grid">
+            <ul class="task-list">
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SA:</strong> Initialize ASP.NET Core 8 Web API; configure Portkey client with local <code>dotnet user-secrets</code>.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>VI:</strong> Initialize React 18 + Vite + TypeScript project; establish CSS design tokens and component shell.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>JE:</strong> Configure database providers (SQLite local default + Cosmos DB Serverless adapter); create initial models.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SM:</strong> Validate <code>attribute-catalog.json</code>, <code>crm-leads.json</code>, and <code>crm-notes.json</code> seed datasets.</span></li>
+            </ul>
+            <div class="deliverable-box">
+              <div class="deliv-label">Deliverables</div>
+              <div class="deliv-text">Compiling .NET 8 API + React 18 SPA + Verified Portkey handshake</div>
+              <div class="ratio-bar-wrap">
+                <div class="ratio-lbl"><span>Claude Code</span><span>50%</span></div>
+                <div class="ratio-bar"><div class="ratio-claude" style="width:50%"></div><div class="ratio-human" style="width:50%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 2 -->
+      <div class="day-card" data-owner="sa vi je sm">
+        <div class="day-header">
+          <div class="day-title-group">
+            <span class="day-badge">Day 2</span>
+            <span class="day-name">ADRs, Data Models & Split-Screen Shell</span>
+            <span class="day-phase">Lifecycle: P3/P4 Solutioning</span>
+          </div>
+          <div class="day-meta">
+            <span class="owner-chip sa">SA</span><span class="owner-chip vi">VI</span><span class="owner-chip je">JE</span><span class="owner-chip sm">SM</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="day-task-grid">
+            <ul class="task-list">
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SA:</strong> Author ADR-001 (Semantic Kernel & Portkey Routing) and ADR-002 (Redaction Gate Contract).</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>VI:</strong> Build responsive Split-Screen layout (Left: Form Ledger, Right: Chat Panel) and SSE streaming hook.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>JE:</strong> Implement C# domain entities for 32 catalog attributes, supporting 7 state flags and citation metadata.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SM:</strong> Design Audit Trail JSON schema (actor, event_type, confidence_score, citations, timestamp).</span></li>
+            </ul>
+            <div class="deliverable-box">
+              <div class="deliv-label">Deliverables</div>
+              <div class="deliv-text">ADR Files + Split-Screen Wireframe + Domain Entities</div>
+              <div class="ratio-bar-wrap">
+                <div class="ratio-lbl"><span>Claude Code</span><span>60%</span></div>
+                <div class="ratio-bar"><div class="ratio-claude" style="width:60%"></div><div class="ratio-human" style="width:40%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 3 -->
+      <div class="day-card" data-owner="sm sa je vi">
+        <div class="day-header">
+          <div class="day-title-group">
+            <span class="day-badge">Day 3</span>
+            <span class="day-name">Seed Data Ingestion & CRM RAG Pipeline</span>
+            <span class="day-phase">Lifecycle: P5 Prep Data</span>
+          </div>
+          <div class="day-meta">
+            <span class="owner-chip sm">SM</span><span class="owner-chip sa">SA</span><span class="owner-chip je">JE</span><span class="owner-chip vi">VI</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="day-task-grid">
+            <ul class="task-list">
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SM:</strong> Build CRM seed ingestion pipeline; implement agnostic chunking for meeting notes with metadata.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SM & SA:</strong> Connect Azure OpenAI embeddings (text-embedding-3-small) and setup AI Search / Qdrant index.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>JE:</strong> Implement Case CRUD APIs (<code>POST /api/cases</code>, <code>GET /api/cases/{id}</code>) with SQLite/Cosmos persistence.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>VI:</strong> Build Form Ledger accordion groups (Account Setup, Applicant Identity, Finances, Funding).</span></li>
+            </ul>
+            <div class="deliverable-box">
+              <div class="deliv-label">Deliverables</div>
+              <div class="deliv-text">Vector-Enabled RAG Database + Case CRUD APIs</div>
+              <div class="ratio-bar-wrap">
+                <div class="ratio-lbl"><span>Claude Code</span><span>60%</span></div>
+                <div class="ratio-bar"><div class="ratio-claude" style="width:60%"></div><div class="ratio-human" style="width:40%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 4 -->
+      <div class="day-card" data-owner="sa je vi">
+        <div class="day-header">
+          <div class="day-title-group">
+            <span class="day-badge">Day 4</span>
+            <span class="day-name">Deterministic Redaction Gate & DB Loader</span>
+            <span class="day-phase">Lifecycle: P4/P6 Build</span>
+          </div>
+          <div class="day-meta">
+            <span class="owner-chip sa">SA</span><span class="owner-chip je">JE</span><span class="owner-chip vi">VI</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="day-task-grid">
+            <ul class="task-list">
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SA:</strong> Implement Deterministic Redaction Gate (.NET service): none, indirect, direct role-token, sensitive vaulted-flag.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SA:</strong> Author comprehensive xUnit test suite verifying 100% zero PII leakage into prompt context.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>JE:</strong> Implement database seeder for Margaret Chen (completed) and Rajiv Mehta (in progress) seed cases.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>VI:</strong> Implement visual status badges on form fields (purple CRM, amber unconfirmed, green confirmed, padlock).</span></li>
+            </ul>
+            <div class="deliverable-box">
+              <div class="deliv-label">Deliverables</div>
+              <div class="deliv-text">Tested Redaction Gate + Seeded Database + Visual Badges</div>
+              <div class="ratio-bar-wrap">
+                <div class="ratio-lbl"><span>Claude Code</span><span>70%</span></div>
+                <div class="ratio-bar"><div class="ratio-claude" style="width:70%"></div><div class="ratio-human" style="width:30%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 5 -->
+      <div class="day-card" data-owner="sa sm vi je">
+        <div class="day-header">
+          <div class="day-title-group">
+            <span class="day-badge">Day 5</span>
+            <span class="day-name">CRM-Assisted Start & MCP Tool Endpoints</span>
+            <span class="day-phase">Lifecycle: P6 Build</span>
+          </div>
+          <div class="day-meta">
+            <span class="owner-chip sa">SA</span><span class="owner-chip sm">SM</span><span class="owner-chip vi">VI</span><span class="owner-chip je">JE</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="day-task-grid">
+            <ul class="task-list">
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SM & SA:</strong> Implement CRM-Assisted Start (Spec §1.1): auto-accept non-material fields, flag material fields for confirmation.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SA:</strong> Implement MCP Tool-use endpoints in ASP.NET Core: <code>GetCrmContext</code>, <code>ProposeFields</code>, <code>ClarifyIntent</code>.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>VI:</strong> Build streaming chat bubble UI, concierge/advisor avatar chips, and citation line component under bot replies.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>JE:</strong> Run concurrency and state transition unit tests across SQLite and Cosmos DB.</span></li>
+            </ul>
+            <div class="deliverable-box">
+              <div class="deliv-label">Deliverables</div>
+              <div class="deliv-text">Working CRM Start Flow + MCP Tools + Streaming Chat UI</div>
+              <div class="ratio-bar-wrap">
+                <div class="ratio-lbl"><span>Claude Code</span><span>60%</span></div>
+                <div class="ratio-bar"><div class="ratio-claude" style="width:60%"></div><div class="ratio-human" style="width:40%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 6 -->
+      <div class="day-card" data-owner="sa vi je sm">
+        <div class="day-header">
+          <div class="day-title-group">
+            <span class="day-badge">Day 6</span>
+            <span class="day-name">Note Extraction & Confidence Floor Reasoning</span>
+            <span class="day-phase">Lifecycle: P6 Build</span>
+          </div>
+          <div class="day-meta">
+            <span class="owner-chip sa">SA</span><span class="owner-chip vi">VI</span><span class="owner-chip je">JE</span><span class="owner-chip sm">SM</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="day-task-grid">
+            <ul class="task-list">
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SA:</strong> Author Claude 3.5 extraction prompt in Semantic Kernel: extract 14 inferable attributes into closed enums with <code>heard</code> text.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SA:</strong> Implement Confidence Floor (< 0.70): trigger polite clarifying question (Spec §1.3) instead of hallucinated proposal.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>VI:</strong> Build Proposal Approval Card (Confirmation Ledger) in chat stream with <code>[Confirm all]</code>, <code>[Edit]</code>, <code>[Reject]</code> buttons.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>JE:</strong> Implement Field Confirmation and Rejection action APIs (<code>POST /api/cases/{id}/actions/confirm</code>).</span></li>
+            </ul>
+            <div class="deliverable-box">
+              <div class="deliv-label">Deliverables</div>
+              <div class="deliv-text">Note Extraction Agent + Proposal Card UI + Clarifying Engine</div>
+              <div class="ratio-bar-wrap">
+                <div class="ratio-lbl"><span>Claude Code</span><span>65%</span></div>
+                <div class="ratio-bar"><div class="ratio-claude" style="width:65%"></div><div class="ratio-human" style="width:35%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 7 -->
+      <div class="day-card" data-owner="sa je vi sm">
+        <div class="day-header">
+          <div class="day-title-group">
+            <span class="day-badge">Day 7</span>
+            <span class="day-name">Value Correction & Downstream Conflict Checks</span>
+            <span class="day-phase">Lifecycle: P6 Build</span>
+          </div>
+          <div class="day-meta">
+            <span class="owner-chip sa">SA</span><span class="owner-chip je">JE</span><span class="owner-chip vi">VI</span><span class="owner-chip sm">SM</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="day-task-grid">
+            <ul class="task-list">
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SA:</strong> Implement downstream conflict engine: validate funding amount vs. liquid net worth band and suitability rules.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>JE:</strong> Implement Correction API (<code>POST /api/cases/{id}/actions/correct</code>): preserve heard text, save corrected value, mark <code>extracted_corrected</code>.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>VI:</strong> Wire inline edit submission on Proposal Cards and render real-time conflict alert banners.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SM:</strong> Wire citation metadata persistence onto case record fields (field value + turn index + confirmed_at).</span></li>
+            </ul>
+            <div class="deliverable-box">
+              <div class="deliv-label">Deliverables</div>
+              <div class="deliv-text">Correction Ledger + Conflict Engine + Lineage Persistence</div>
+              <div class="ratio-bar-wrap">
+                <div class="ratio-lbl"><span>Claude Code</span><span>60%</span></div>
+                <div class="ratio-bar"><div class="ratio-claude" style="width:60%"></div><div class="ratio-human" style="width:40%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 8 -->
+      <div class="day-card" data-owner="sa sm vi je">
+        <div class="day-header">
+          <div class="day-title-group">
+            <span class="day-badge">Day 8</span>
+            <span class="day-name">Citations Formatting & Dual Retrieval Flow</span>
+            <span class="day-phase">Lifecycle: P6 Build</span>
+          </div>
+          <div class="day-meta">
+            <span class="owner-chip sa">SA</span><span class="owner-chip sm">SM</span><span class="owner-chip vi">VI</span><span class="owner-chip je">JE</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="day-task-grid">
+            <ul class="task-list">
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SA & SM:</strong> Assemble Dual Retrieval prompt: conversation history + redacted session state + top-2 CRM RAG chunks.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SA:</strong> Format structured citations (<code>crm_retrieval</code>: chunk_id, record_id, excerpt; <code>session_recall</code>: field, turn_index).</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>VI:</strong> Render clickable citation lines with tooltip excerpts in React; synchronize form view in real time.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>JE:</strong> Implement validation check: ensure <code>can_submit = false</code> while any unconfirmed fields exist.</span></li>
+            </ul>
+            <div class="deliverable-box">
+              <div class="deliv-label">Deliverables</div>
+              <div class="deliv-text">End-to-End Dual Retrieval + Interactive Citations + Form Sync</div>
+              <div class="ratio-bar-wrap">
+                <div class="ratio-lbl"><span>Claude Code</span><span>60%</span></div>
+                <div class="ratio-bar"><div class="ratio-claude" style="width:60%"></div><div class="ratio-human" style="width:40%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 9 -->
+      <div class="day-card" data-owner="sm sa vi je">
+        <div class="day-header">
+          <div class="day-title-group">
+            <span class="day-badge">Day 9</span>
+            <span class="day-name">Golden Dataset Evaluation & Adversarial Evals</span>
+            <span class="day-phase">Lifecycle: P7 Evals</span>
+          </div>
+          <div class="day-meta">
+            <span class="owner-chip sm">SM</span><span class="owner-chip sa">SA</span><span class="owner-chip vi">VI</span><span class="owner-chip je">JE</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="day-task-grid">
+            <ul class="task-list">
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SM & SA:</strong> Execute automated evaluation against 20 curated advisor test notes; benchmark precision, recall, enum accuracy.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SA:</strong> Execute adversarial prompt injection testing (attempting to bypass advisor confirmation or override titling).</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>VI:</strong> Polish UI micro-animations, loading skeletons, keyboard accessibility, and mobile responsiveness.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>JE:</strong> Run database query optimizations to ensure API end-to-end response time &lt; 2.0 seconds.</span></li>
+            </ul>
+            <div class="deliverable-box">
+              <div class="deliv-label">Deliverables</div>
+              <div class="deliv-text">Evaluation Scorecard + Adversarial Security Report</div>
+              <div class="ratio-bar-wrap">
+                <div class="ratio-lbl"><span>Claude Code</span><span>50%</span></div>
+                <div class="ratio-bar"><div class="ratio-claude" style="width:50%"></div><div class="ratio-human" style="width:50%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 10 -->
+      <div class="day-card" data-owner="all sa vi je sm">
+        <div class="day-header">
+          <div class="day-title-group">
+            <span class="day-badge">Day 10</span>
+            <span class="day-name">End-to-End Walkthrough & Handover Demo</span>
+            <span class="day-phase">Lifecycle: P7 Deploy</span>
+          </div>
+          <div class="day-meta">
+            <span class="owner-chip all">All Team</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="day-task-grid">
+            <ul class="task-list">
+              <li class="task-item"><span class="task-bullet"></span><span><strong>All:</strong> Conduct complete walkthrough of Case 1 (Margaret Chen) and Case 2 (Rajiv Mehta) onboarding flows.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SM & JE:</strong> Verify complete audit trail integrity: intake &rarr; note paste &rarr; clarifying question &rarr; edit &rarr; confirm.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>SA & VI:</strong> Export OpenAPI / Swagger documentation and finalize demo script for executive review.</span></li>
+              <li class="task-item"><span class="task-bullet"></span><span><strong>All:</strong> Align deployment cycle with client cloud sandbox for Phase 2 staging.</span></li>
+            </ul>
+            <div class="deliverable-box">
+              <div class="deliv-label">Deliverables</div>
+              <div class="deliv-text">Fully Functional Prototype + Complete Audit Logs + Demo Package</div>
+              <div class="ratio-bar-wrap">
+                <div class="ratio-lbl"><span>Claude Code</span><span>50%</span></div>
+                <div class="ratio-bar"><div class="ratio-claude" style="width:50%"></div><div class="ratio-human" style="width:50%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Specifications -->
+  <section class="section" id="specifications">
+    <div class="section-header">
+      <div class="section-title">
+        <div class="section-icon">📋</div>
+        <h3>Conversational Intake: In-Scope Attribute Catalog (14 Attributes)</h3>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th>Attribute Key</th>
+          <th>Group</th>
+          <th>Type</th>
+          <th>Materiality</th>
+          <th>PII Tier</th>
+          <th>Target Enums / Constraints</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="code">account.type</td>
+          <td>Account Setup</td>
+          <td>enum</td>
+          <td>Material</td>
+          <td><span class="pii-tag none">none</span></td>
+          <td>INDIVIDUAL, JOINT_WROS</td>
+        </tr>
+        <tr>
+          <td class="code">account.advisory_program</td>
+          <td>Account Setup</td>
+          <td>enum</td>
+          <td>Material</td>
+          <td><span class="pii-tag none">none</span></td>
+          <td>ADVISOR_DRIVEN, UMA, THIRD_PARTY_MF, DIGITAL_ADVICE</td>
+        </tr>
+        <tr>
+          <td class="code">account.purpose</td>
+          <td>Account Setup</td>
+          <td>enum</td>
+          <td>Non-material</td>
+          <td><span class="pii-tag none">none</span></td>
+          <td>RETIREMENT, EDUCATION, WEALTH_ACCUMULATION, INCOME, ESTATE_PLANNING</td>
+        </tr>
+        <tr>
+          <td class="code">applicant.legal_name</td>
+          <td>Applicant Identity</td>
+          <td>composite</td>
+          <td>Material</td>
+          <td><span class="pii-tag direct">direct</span></td>
+          <td>Masked to Role Token: <code>OWNER_1</code></td>
+        </tr>
+        <tr>
+          <td class="code">applicant.tax_id</td>
+          <td>Applicant Identity</td>
+          <td>masked</td>
+          <td>Material</td>
+          <td><span class="pii-tag sensitive">sensitive</span></td>
+          <td>Masked to Vaulted Flag: <code>{"state":"vaulted","filled":true}</code></td>
+        </tr>
+        <tr>
+          <td class="code">applicant.citizenship_status</td>
+          <td>Applicant Identity</td>
+          <td>enum</td>
+          <td>Material</td>
+          <td><span class="pii-tag indirect">indirect</span></td>
+          <td>US_CITIZEN, US_RESIDENT_ALIEN, NON_RESIDENT_ALIEN</td>
+        </tr>
+        <tr>
+          <td class="code">applicant.email</td>
+          <td>Applicant Identity</td>
+          <td>email</td>
+          <td>Non-material</td>
+          <td><span class="pii-tag direct">direct</span></td>
+          <td>Masked to Role Token: <code>EMAIL_1</code></td>
+        </tr>
+        <tr>
+          <td class="code">applicant.mobile_phone</td>
+          <td>Applicant Identity</td>
+          <td>phone</td>
+          <td>Non-material</td>
+          <td><span class="pii-tag direct">direct</span></td>
+          <td>Masked to Role Token: <code>PHONE_1</code></td>
+        </tr>
+        <tr>
+          <td class="code">employment.status</td>
+          <td>Employment & Finances</td>
+          <td>enum</td>
+          <td>Material</td>
+          <td><span class="pii-tag indirect">indirect</span></td>
+          <td>EMPLOYED, SELF_EMPLOYED, RETIRED, STUDENT, NOT_EMPLOYED</td>
+        </tr>
+        <tr>
+          <td class="code">employment.employer_name</td>
+          <td>Employment & Finances</td>
+          <td>text</td>
+          <td>Material</td>
+          <td><span class="pii-tag indirect">indirect</span></td>
+          <td>Text string (only if employed or self-employed)</td>
+        </tr>
+        <tr>
+          <td class="code">financial.annual_income</td>
+          <td>Employment & Finances</td>
+          <td>enum</td>
+          <td>Material</td>
+          <td><span class="pii-tag indirect">indirect</span></td>
+          <td>UNDER_50K, 50K_100K, 100K_250K, 250K_500K, OVER_500K</td>
+        </tr>
+        <tr>
+          <td class="code">financial.liquid_net_worth</td>
+          <td>Employment & Finances</td>
+          <td>enum</td>
+          <td>Material</td>
+          <td><span class="pii-tag indirect">indirect</span></td>
+          <td>UNDER_50K, 50K_250K, 250K_1M, 1M_5M, OVER_5M</td>
+        </tr>
+        <tr>
+          <td class="code">funding.method</td>
+          <td>Funding</td>
+          <td>enum</td>
+          <td>Material</td>
+          <td><span class="pii-tag none">none</span></td>
+          <td>ACAT_TRANSFER, ACH, CHECK, WIRE, IRA_ROLLOVER</td>
+        </tr>
+        <tr>
+          <td class="code">funding.initial_amount</td>
+          <td>Funding</td>
+          <td>currency</td>
+          <td>Material</td>
+          <td><span class="pii-tag indirect">indirect</span></td>
+          <td>Currency amount; checked against liquid net worth band</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Quality Gates Checklist -->
+  <section class="section" id="gates">
+    <div class="section-header">
+      <div class="section-title">
+        <div class="section-icon">🛡️</div>
+        <h3>Quality Gates & Acceptance Criteria</h3>
+      </div>
+    </div>
+    <div class="gates-grid">
+      <div class="gate-card">
+        <div class="gate-icon">🔒</div>
+        <div class="gate-content">
+          <h4>Deterministic Redaction</h4>
+          <p>Zero PII transmitted across the LLM prompt boundary. 100% test pass on role-token and vaulted-flag conversion.</p>
+        </div>
+      </div>
+      <div class="gate-card">
+        <div class="gate-icon">✍️</div>
+        <div class="gate-content">
+          <h4>Advisor Confirmation Rule</h4>
+          <p>Zero values written to permanent record without explicit advisor action (<code>Confirm</code> or <code>Confirm all</code>).</p>
+        </div>
+      </div>
+      <div class="gate-card">
+        <div class="gate-icon">🎯</div>
+        <div class="gate-content">
+          <h4>Confidence Floor (0.70)</h4>
+          <p>Ambiguous remarks strictly trigger clarifying questions instead of hallucinated field proposals.</p>
+        </div>
+      </div>
+      <div class="gate-card">
+        <div class="gate-icon">📎</div>
+        <div class="gate-content">
+          <h4>Audited Citation Grounding</h4>
+          <p>100% of CRM-derived values carry source chunk ID, timestamp, and verbatim <code>heard</code> text.</p>
+        </div>
+      </div>
+      <div class="gate-card">
+        <div class="gate-icon">⚡</div>
+        <div class="gate-content">
+          <h4>Dual-Provider Persistence</h4>
+          <p>Application runs seamlessly on local SQLite development database and Azure Cosmos DB Serverless.</p>
+        </div>
+      </div>
+      <div class="gate-card">
+        <div class="gate-icon">🚫</div>
+        <div class="gate-content">
+          <h4>Submission Blocker</h4>
+          <p>The form submission remains locked while any field is in an <code>extracted_unconfirmed</code> state.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>NAO Concierge Prototype Project · Plan 1 Tech Stack · Forward Deployment Engineer (FDE) Methodology</p>
+    <p style="margin-top:4px;color:var(--text-muted)">Created for Swaroop Raj &amp; Engineering Team · Target Delivery: 2-Week Sprint</p>
+  </footer>
+
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme') || 'light';
+  const target = current === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', target);
+  document.getElementById('theme-icon').textContent = target === 'light' ? '🌙' : '☀️';
+  document.getElementById('theme-text').textContent = target === 'light' ? 'Dark' : 'Light';
+}
+
+function filterTrack(track) {
+  // Update buttons
+  const buttons = document.querySelectorAll('.filter-btn');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+
+  // Filter day cards
+  const cards = document.querySelectorAll('.day-card');
+  cards.forEach(card => {
+    const owners = card.getAttribute('data-owner') || '';
+    if (track === 'all' || owners.includes(track)) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>

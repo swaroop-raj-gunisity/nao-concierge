@@ -1,0 +1,475 @@
+{
+  "catalog_version": "nao-cat-2026.09.1",
+  "total_attributes": 32,
+  "total_groups": 12,
+  "registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"],
+  "prototype_registrations": ["INDIVIDUAL", "JOINT_WROS"],
+  "prototype_states": ["captured_direct", "extracted_confirmed", "prefilled_accepted", "prefilled_confirmed"],
+
+  "groups": [
+    {
+      "key": "account_setup",
+      "label": "Account Setup",
+      "order": 1,
+      "attributes": ["account.type", "account.advisory_program", "account.purpose"]
+    },
+    {
+      "key": "applicant_identity",
+      "label": "Applicant Identity",
+      "order": 2,
+      "attributes": ["applicant.legal_name", "applicant.date_of_birth", "applicant.tax_id", "applicant.citizenship_status", "applicant.legal_address", "applicant.email", "applicant.mobile_phone"]
+    },
+    {
+      "key": "employment_finances",
+      "label": "Employment & Finances",
+      "order": 3,
+      "attributes": ["employment.status", "employment.employer_name", "financial.annual_income", "financial.liquid_net_worth"]
+    },
+    {
+      "key": "household",
+      "label": "Household",
+      "order": 4,
+      "attributes": ["household.dependants", "household.minor_dependants"]
+    },
+    {
+      "key": "investment_profile",
+      "label": "Investment Profile",
+      "order": 5,
+      "attributes": ["profile.investment_objective", "profile.risk_tolerance", "profile.time_horizon"]
+    },
+    {
+      "key": "regulatory",
+      "label": "Regulatory Questions",
+      "order": 6,
+      "attributes": ["reg.finra_affiliation", "reg.control_person"]
+    },
+    {
+      "key": "joint_owners",
+      "label": "Joint Owners",
+      "order": 7,
+      "attributes": ["joint_owners"]
+    },
+    {
+      "key": "entity",
+      "label": "Trust & UTMA",
+      "order": 8,
+      "attributes": ["entity.legal_title", "entity.responsible_parties", "entity.certification_doc"]
+    },
+    {
+      "key": "beneficiaries",
+      "label": "Beneficiaries",
+      "order": 9,
+      "attributes": ["beneficiaries"]
+    },
+    {
+      "key": "trusted_contact",
+      "label": "Trusted Contact",
+      "order": 10,
+      "attributes": ["trusted_contact"]
+    },
+    {
+      "key": "funding",
+      "label": "Funding",
+      "order": 11,
+      "attributes": ["funding.method", "funding.initial_amount", "funding.delivering_institution"]
+    },
+    {
+      "key": "disclosures",
+      "label": "Disclosures",
+      "order": 12,
+      "attributes": ["disclosure.form_crs_ack", "disclosure.advisory_agreement_ack"]
+    }
+  ],
+
+  "attributes": {
+    "account.type": {
+      "key": "account.type",
+      "group": "account_setup",
+      "label": "Account Type",
+      "type": "enum",
+      "required": "always",
+      "pii": "none",
+      "note": "Five registrations. Drives everything else.",
+      "enum_values": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"],
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "account.advisory_program": {
+      "key": "account.advisory_program",
+      "group": "account_setup",
+      "label": "Advisory Program",
+      "type": "enum",
+      "required": "always",
+      "pii": "none",
+      "note": "Fee schedule and which rules apply.",
+      "enum_values": ["ADVISOR_DRIVEN", "UMA", "THIRD_PARTY_MF", "DIGITAL_ADVICE"],
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "account.purpose": {
+      "key": "account.purpose",
+      "group": "account_setup",
+      "label": "Account Purpose",
+      "type": "enum",
+      "required": "always",
+      "pii": "none",
+      "note": "Free speech is mapped to one option.",
+      "enum_values": ["RETIREMENT", "EDUCATION", "WEALTH_ACCUMULATION", "INCOME", "ESTATE_PLANNING"],
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "applicant.legal_name": {
+      "key": "applicant.legal_name",
+      "group": "applicant_identity",
+      "label": "Legal Name",
+      "type": "composite",
+      "composite_fields": {
+        "first": { "type": "string", "required": true },
+        "middle": { "type": "string", "required": false },
+        "last": { "type": "string", "required": true },
+        "suffix": { "type": "string", "required": false }
+      },
+      "required": "always",
+      "pii": "direct",
+      "note": "Must match the ID exactly.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "applicant.date_of_birth": {
+      "key": "applicant.date_of_birth",
+      "group": "applicant_identity",
+      "label": "Date of Birth",
+      "type": "date",
+      "format": "YYYY-MM-DD",
+      "required": "always",
+      "pii": "direct",
+      "note": "Secure field. The agent never sees it.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "applicant.tax_id": {
+      "key": "applicant.tax_id",
+      "group": "applicant_identity",
+      "label": "Tax ID (SSN/ITIN)",
+      "type": "masked",
+      "format": "***-**-NNNN",
+      "required": "always",
+      "pii": "sensitive",
+      "note": "Secure field. The agent never sees it.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "applicant.citizenship_status": {
+      "key": "applicant.citizenship_status",
+      "group": "applicant_identity",
+      "label": "Citizenship Status",
+      "type": "enum",
+      "required": "always",
+      "pii": "indirect",
+      "note": "Decides which tax form is generated.",
+      "enum_values": ["US_CITIZEN", "US_RESIDENT_ALIEN", "NON_RESIDENT_ALIEN"],
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "applicant.legal_address": {
+      "key": "applicant.legal_address",
+      "group": "applicant_identity",
+      "label": "Legal Address",
+      "type": "address",
+      "composite_fields": {
+        "line1": { "type": "string", "required": true },
+        "line2": { "type": "string", "required": false },
+        "city": { "type": "string", "required": true },
+        "state": { "type": "string", "required": true },
+        "postal_code": { "type": "string", "required": true },
+        "country": { "type": "string", "required": true }
+      },
+      "required": "always",
+      "pii": "direct",
+      "note": "No PO box. State affects spousal rules.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "applicant.email": {
+      "key": "applicant.email",
+      "group": "applicant_identity",
+      "label": "Email Address",
+      "type": "email",
+      "required": "always",
+      "pii": "direct",
+      "note": "Where signing requests are sent.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "applicant.mobile_phone": {
+      "key": "applicant.mobile_phone",
+      "group": "applicant_identity",
+      "label": "Mobile Phone",
+      "type": "phone",
+      "required": "always",
+      "pii": "direct",
+      "note": "Used for the security code at signing.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "employment.status": {
+      "key": "employment.status",
+      "group": "employment_finances",
+      "label": "Employment Status",
+      "type": "enum",
+      "required": "always",
+      "pii": "indirect",
+      "note": "Opens the employer question.",
+      "enum_values": ["EMPLOYED", "SELF_EMPLOYED", "RETIRED", "STUDENT", "NOT_EMPLOYED"],
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA"]
+    },
+    "employment.employer_name": {
+      "key": "employment.employer_name",
+      "group": "employment_finances",
+      "label": "Employer Name",
+      "type": "text",
+      "required": "conditional",
+      "condition": "employment.status IN [EMPLOYED, SELF_EMPLOYED]",
+      "pii": "indirect",
+      "note": "Only if employed or self-employed.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA"]
+    },
+    "financial.annual_income": {
+      "key": "financial.annual_income",
+      "group": "employment_finances",
+      "label": "Annual Income",
+      "type": "enum",
+      "required": "always",
+      "pii": "indirect",
+      "note": "Banded, never an exact figure.",
+      "enum_values": ["UNDER_50K", "50K_100K", "100K_250K", "250K_500K", "OVER_500K"],
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "financial.liquid_net_worth": {
+      "key": "financial.liquid_net_worth",
+      "group": "employment_finances",
+      "label": "Liquid Net Worth",
+      "type": "enum",
+      "required": "always",
+      "pii": "indirect",
+      "note": "Checked against the funding amount.",
+      "enum_values": ["UNDER_50K", "50K_250K", "250K_1M", "1M_5M", "OVER_5M"],
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "household.dependants": {
+      "key": "household.dependants",
+      "group": "household",
+      "label": "Number of Dependants",
+      "type": "integer",
+      "required": "optional",
+      "pii": "indirect",
+      "note": "Context for planning. Not on the custodian form.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA"]
+    },
+    "household.minor_dependants": {
+      "key": "household.minor_dependants",
+      "group": "household",
+      "label": "Minor Dependants (under 18)",
+      "type": "integer",
+      "required": "optional",
+      "pii": "indirect",
+      "note": "Drives the education-funding prompt and UTMA suggestion.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA"]
+    },
+    "profile.investment_objective": {
+      "key": "profile.investment_objective",
+      "group": "investment_profile",
+      "label": "Investment Objective",
+      "type": "enum",
+      "required": "always",
+      "pii": "none",
+      "note": "Limits which portfolios are allowed.",
+      "enum_values": ["CAPITAL_PRESERVATION", "INCOME", "GROWTH_AND_INCOME", "GROWTH", "SPECULATION"],
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "profile.risk_tolerance": {
+      "key": "profile.risk_tolerance",
+      "group": "investment_profile",
+      "label": "Risk Tolerance",
+      "type": "enum",
+      "required": "always",
+      "pii": "none",
+      "note": "The most important cross-check in the set.",
+      "enum_values": ["CONSERVATIVE", "MOD_CONSERVATIVE", "MODERATE", "MOD_AGGRESSIVE", "AGGRESSIVE"],
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "profile.time_horizon": {
+      "key": "profile.time_horizon",
+      "group": "investment_profile",
+      "label": "Time Horizon",
+      "type": "enum",
+      "required": "always",
+      "pii": "none",
+      "note": "Short horizon plus aggressive objective is flagged.",
+      "enum_values": ["UNDER_3Y", "3_5Y", "5_10Y", "OVER_10Y"],
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "reg.finra_affiliation": {
+      "key": "reg.finra_affiliation",
+      "group": "regulatory",
+      "label": "FINRA Affiliation",
+      "type": "boolean",
+      "required": "always",
+      "pii": "indirect",
+      "note": "Yes means an approval letter is required first.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "reg.control_person": {
+      "key": "reg.control_person",
+      "group": "regulatory",
+      "label": "Control Person",
+      "type": "boolean",
+      "required": "always",
+      "pii": "indirect",
+      "note": "Yes means the company ticker is captured.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "joint_owners": {
+      "key": "joint_owners",
+      "group": "joint_owners",
+      "label": "Joint Account Owners",
+      "type": "repeating",
+      "min_items": 1,
+      "max_items": 3,
+      "required": "conditional",
+      "condition": "account.type = JOINT_WROS",
+      "pii": "direct",
+      "note": "Each owner answers the identity questions and signs. Owner[0] is always same_as applicant.",
+      "repeating_fields": ["legal_name", "date_of_birth", "tax_id", "citizenship_status", "legal_address", "email", "mobile_phone"],
+      "applicable_registrations": ["JOINT_WROS"]
+    },
+    "entity.legal_title": {
+      "key": "entity.legal_title",
+      "group": "entity",
+      "label": "Entity Legal Title",
+      "type": "text",
+      "required": "conditional",
+      "condition": "account.type IN [REVOCABLE_TRUST, UTMA]",
+      "pii": "indirect",
+      "note": "Must match the certification document word for word.",
+      "applicable_registrations": ["REVOCABLE_TRUST", "UTMA"]
+    },
+    "entity.responsible_parties": {
+      "key": "entity.responsible_parties",
+      "group": "entity",
+      "label": "Responsible Parties",
+      "type": "repeating",
+      "min_items": 1,
+      "max_items": 4,
+      "required": "conditional",
+      "condition": "account.type IN [REVOCABLE_TRUST, UTMA]",
+      "pii": "direct",
+      "note": "Trustees, or exactly one UTMA custodian (a person).",
+      "repeating_fields": ["legal_name", "role", "tax_id"],
+      "role_enum": ["TRUSTEE", "SUCCESSOR_TRUSTEE", "UTMA_CUSTODIAN", "MINOR"],
+      "applicable_registrations": ["REVOCABLE_TRUST", "UTMA"]
+    },
+    "entity.certification_doc": {
+      "key": "entity.certification_doc",
+      "group": "entity",
+      "label": "Trust/UTMA Certification Document",
+      "type": "file",
+      "required": "conditional",
+      "condition": "account.type IN [REVOCABLE_TRUST, UTMA]",
+      "pii": "direct",
+      "note": "Blocks submission until uploaded.",
+      "applicable_registrations": ["REVOCABLE_TRUST", "UTMA"]
+    },
+    "beneficiaries": {
+      "key": "beneficiaries",
+      "group": "beneficiaries",
+      "label": "Beneficiaries",
+      "type": "repeating",
+      "min_items": 1,
+      "max_items": 6,
+      "required": "conditional",
+      "condition": "account.type = TRADITIONAL_IRA",
+      "pii": "direct",
+      "note": "Primary shares must total exactly 100.",
+      "repeating_fields": ["legal_name", "date_of_birth", "relationship", "class", "share_pct"],
+      "class_enum": ["PRIMARY", "CONTINGENT"],
+      "validation": "SUM(share_pct WHERE class=PRIMARY) = 100",
+      "applicable_registrations": ["TRADITIONAL_IRA"]
+    },
+    "trusted_contact": {
+      "key": "trusted_contact",
+      "group": "trusted_contact",
+      "label": "Trusted Contact Person",
+      "type": "composite",
+      "composite_fields": {
+        "name": { "type": "string", "required": true },
+        "relationship": { "type": "string", "required": true },
+        "phone": { "type": "phone", "required": true },
+        "email": { "type": "email", "required": false },
+        "declined": { "type": "boolean", "required": false }
+      },
+      "required": "always",
+      "pii": "direct",
+      "note": "Can be declined, but the decline is recorded.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "funding.method": {
+      "key": "funding.method",
+      "group": "funding",
+      "label": "Funding Method",
+      "type": "enum",
+      "required": "always",
+      "pii": "none",
+      "note": "Opens the delivering-institution section.",
+      "enum_values": ["ACAT_TRANSFER", "ACH", "CHECK", "WIRE", "IRA_ROLLOVER"],
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "funding.initial_amount": {
+      "key": "funding.initial_amount",
+      "group": "funding",
+      "label": "Initial Funding Amount",
+      "type": "currency",
+      "required": "always",
+      "pii": "indirect",
+      "note": "Checked against declared net worth.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "funding.delivering_institution": {
+      "key": "funding.delivering_institution",
+      "group": "funding",
+      "label": "Delivering Institution",
+      "type": "composite",
+      "composite_fields": {
+        "institution_name": { "type": "string", "required": true },
+        "account_number": { "type": "masked", "required": true },
+        "registration_type": { "type": "string", "required": true },
+        "registration_id": { "type": "string", "required": true },
+        "transfer_scope": { "type": "string", "required": true, "enum_values": ["FULL", "PARTIAL"] }
+      },
+      "required": "conditional",
+      "condition": "funding.method IN [ACAT_TRANSFER, IRA_ROLLOVER]",
+      "pii": "sensitive",
+      "note": "Registration must match or the transfer bounces.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "disclosure.form_crs_ack": {
+      "key": "disclosure.form_crs_ack",
+      "group": "disclosures",
+      "label": "Form CRS Acknowledgement",
+      "type": "attestation",
+      "required": "always",
+      "pii": "none",
+      "note": "Exact approved wording only.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    },
+    "disclosure.advisory_agreement_ack": {
+      "key": "disclosure.advisory_agreement_ack",
+      "group": "disclosures",
+      "label": "Advisory Agreement Acknowledgement",
+      "type": "attestation",
+      "required": "always",
+      "pii": "none",
+      "note": "Exact approved wording only.",
+      "applicable_registrations": ["INDIVIDUAL", "JOINT_WROS", "TRADITIONAL_IRA", "REVOCABLE_TRUST", "UTMA"]
+    }
+  },
+
+  "section_triggers": [
+    { "when": "account.type = JOINT_WROS", "opens": "joint_owners", "closes": null },
+    { "when": "account.type IN [REVOCABLE_TRUST, UTMA]", "opens": "entity", "closes": "joint_owners" },
+    { "when": "account.type = TRADITIONAL_IRA", "opens": "beneficiaries", "closes": "joint_owners" },
+    { "when": "funding.method IN [ACAT_TRANSFER, IRA_ROLLOVER]", "opens": "funding.delivering_institution", "closes": null },
+    { "when": "employment.status IN [EMPLOYED, SELF_EMPLOYED]", "opens": "employment.employer_name", "closes": null },
+    { "when": "reg.finra_affiliation = true", "opens": "finra_approval_letter_upload", "closes": null }
+  ]
+}

@@ -1,0 +1,331 @@
+{
+  "case_id": "CASE-0002",
+  "created_at": "2026-09-12T10:30:00Z",
+  "updated_at": "2026-09-17T15:45:00Z",
+  "catalog_version": "nao-cat-2026.09.1",
+  "registration": "JOINT_WROS",
+  "stage": "intake",
+  "status": "in_progress",
+  "assigned_to": "ADV-SK-017",
+  "lead_id": "LEAD-1002",
+
+  "values": {
+    "account.type": {
+      "value": "JOINT_WROS",
+      "state": "extracted_confirmed",
+      "heard": "my wife Ananya handles all our investments — she should be on the account too",
+      "confidence": 0.87,
+      "source": "conversation",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-12T10:42:00Z"
+    },
+    "account.advisory_program": {
+      "value": "UMA",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-12T10:35:00Z"
+    },
+    "account.purpose": {
+      "value": "WEALTH_ACCUMULATION",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-12T10:36:00Z"
+    },
+
+    "applicant.legal_name": {
+      "value": {
+        "first": "Rajiv",
+        "middle": "K",
+        "last": "Mehta",
+        "suffix": null
+      },
+      "state": "prefilled_confirmed",
+      "source": "crm.contact",
+      "source_age_days": 8,
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-12T10:38:00Z"
+    },
+    "applicant.date_of_birth": {
+      "value": "1988-07-22",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-12T10:40:00Z"
+    },
+    "applicant.tax_id": {
+      "value": "***-**-9156",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-12T10:40:00Z"
+    },
+    "applicant.citizenship_status": {
+      "value": "US_CITIZEN",
+      "state": "prefilled_accepted",
+      "source": "crm.meeting_note",
+      "source_age_days": 8
+    },
+    "applicant.legal_address": {
+      "value": {
+        "line1": "2891 Highland Dr",
+        "line2": null,
+        "city": "Bellevue",
+        "state": "WA",
+        "postal_code": "98004",
+        "country": "US"
+      },
+      "state": "prefilled_confirmed",
+      "source": "crm.contact",
+      "source_age_days": 8,
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-12T10:38:00Z"
+    },
+    "applicant.email": {
+      "value": "rajiv.mehta@email.com",
+      "state": "prefilled_accepted",
+      "source": "crm.contact",
+      "source_age_days": 8
+    },
+    "applicant.mobile_phone": {
+      "value": "(425) 555-0283",
+      "state": "prefilled_accepted",
+      "source": "crm.contact",
+      "source_age_days": 8
+    },
+
+    "employment.status": {
+      "value": "EMPLOYED",
+      "state": "prefilled_accepted",
+      "source": "crm.meeting_note",
+      "source_age_days": 5
+    },
+    "employment.employer_name": {
+      "value": "Amazon",
+      "state": "prefilled_accepted",
+      "source": "crm.meeting_note",
+      "source_age_days": 5
+    },
+    "financial.annual_income": {
+      "value": "250K_500K",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-15T11:08:00Z"
+    },
+    "financial.liquid_net_worth": {
+      "value": "1M_5M",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-15T11:08:00Z"
+    },
+
+    "household.dependants": {
+      "value": 2,
+      "state": "extracted_confirmed",
+      "heard": "we have two kids",
+      "confidence": 0.97,
+      "source": "conversation",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-15T11:12:00Z"
+    },
+    "household.minor_dependants": {
+      "value": 1,
+      "state": "extracted_confirmed",
+      "heard": "our younger one is six",
+      "confidence": 0.93,
+      "source": "conversation",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-15T11:12:00Z"
+    },
+
+    "profile.investment_objective": {
+      "value": "GROWTH",
+      "state": "prefilled_confirmed",
+      "source": "crm.meeting_note",
+      "source_age_days": 5,
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-15T11:15:00Z"
+    },
+    "profile.risk_tolerance": {
+      "value": "MOD_AGGRESSIVE",
+      "state": "prefilled_confirmed",
+      "source": "crm.meeting_note",
+      "source_age_days": 5,
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-15T11:15:00Z"
+    },
+    "profile.time_horizon": {
+      "value": "OVER_10Y",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-15T11:16:00Z"
+    },
+
+    "reg.finra_affiliation": {
+      "value": false,
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-15T11:18:00Z"
+    },
+    "reg.control_person": {
+      "value": false,
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-15T11:18:00Z"
+    },
+
+    "trusted_contact": {
+      "value": null,
+      "state": null,
+      "note": "Not yet collected"
+    },
+
+    "funding.method": {
+      "value": "ACH",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-17T15:30:00Z"
+    },
+    "funding.initial_amount": {
+      "value": 150000,
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-SK-017",
+      "confirmed_at": "2026-09-17T15:31:00Z"
+    },
+    "funding.delivering_institution": {
+      "value": null,
+      "state": null,
+      "note": "Not applicable — funding.method is ACH"
+    },
+
+    "disclosure.form_crs_ack": {
+      "value": null,
+      "state": null,
+      "note": "Not yet acknowledged"
+    },
+    "disclosure.advisory_agreement_ack": {
+      "value": null,
+      "state": null,
+      "note": "Not yet acknowledged"
+    }
+  },
+
+  "repeating": {
+    "joint_owners": [
+      {
+        "index": 0,
+        "same_as": "applicant"
+      },
+      {
+        "index": 1,
+        "same_as": null,
+        "values": {
+          "legal_name": {
+            "value": {
+              "first": "Ananya",
+              "middle": "R",
+              "last": "Mehta",
+              "suffix": null
+            },
+            "state": "captured_direct",
+            "source": "advisor",
+            "confirmed_by": "ADV-SK-017",
+            "confirmed_at": "2026-09-17T15:35:00Z"
+          },
+          "date_of_birth": {
+            "value": null,
+            "state": null,
+            "note": "Not yet collected"
+          },
+          "tax_id": {
+            "value": null,
+            "state": null,
+            "note": "Not yet collected"
+          },
+          "citizenship_status": {
+            "value": null,
+            "state": null,
+            "note": "Not yet collected"
+          },
+          "legal_address": {
+            "value": null,
+            "state": null,
+            "note": "Not yet collected — likely same as primary applicant"
+          },
+          "email": {
+            "value": "ananya.mehta@email.com",
+            "state": "captured_direct",
+            "source": "advisor",
+            "confirmed_by": "ADV-SK-017",
+            "confirmed_at": "2026-09-17T15:36:00Z"
+          },
+          "mobile_phone": {
+            "value": null,
+            "state": null,
+            "note": "Not yet collected"
+          }
+        }
+      }
+    ],
+    "beneficiaries": [],
+    "entity_responsible_parties": []
+  },
+
+  "documents": [],
+
+  "sections": {
+    "completed": [
+      "account_setup",
+      "applicant_identity",
+      "employment_finances",
+      "household",
+      "investment_profile",
+      "regulatory"
+    ],
+    "open": [
+      "joint_owners"
+    ],
+    "not_started": [
+      "trusted_contact",
+      "disclosures"
+    ],
+    "not_applicable": [
+      "entity",
+      "beneficiaries"
+    ]
+  },
+
+  "submission": {
+    "can_submit": false,
+    "unconfirmed_count": 0,
+    "missing_required": [
+      "joint_owners[1].date_of_birth",
+      "joint_owners[1].tax_id",
+      "joint_owners[1].citizenship_status",
+      "joint_owners[1].legal_address",
+      "joint_owners[1].mobile_phone",
+      "trusted_contact",
+      "disclosure.form_crs_ack",
+      "disclosure.advisory_agreement_ack"
+    ],
+    "blocking_documents": [],
+    "open_flags": []
+  },
+
+  "audit": {
+    "turns": 9,
+    "sessions": 3,
+    "first_session": "2026-09-12T10:30:00Z",
+    "last_session": "2026-09-17T15:45:00Z",
+    "model_version": "claude-sonnet-4-20250514",
+    "prompt_version": "intake-v3"
+  }
+}

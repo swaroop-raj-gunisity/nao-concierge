@@ -1,0 +1,28 @@
+# IDE
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Environment
+.env
+.env.*
+
+# Dependencies
+node_modules/
+packages/
+
+# Build
+bin/
+obj/
+dist/
+out/
+
+# Claude Code
+.claude/

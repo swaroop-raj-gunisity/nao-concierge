@@ -1,0 +1,52 @@
+[
+  {
+    "lead_id": "LEAD-1001",
+    "name": "Margaret A. Chen",
+    "first_name": "Margaret",
+    "middle_name": "A",
+    "last_name": "Chen",
+    "email": "margaret.chen@email.com",
+    "phone": "(512) 555-0147",
+    "address": {
+      "line1": "4712 Barton Creek Blvd",
+      "line2": null,
+      "city": "Austin",
+      "state": "TX",
+      "postal_code": "78735",
+      "country": "US"
+    },
+    "advisor_id": "ADV-KP-042",
+    "advisor_name": "Kevin Park",
+    "created_at": "2023-06-15T14:30:00Z",
+    "last_updated": "2026-08-20T11:15:00Z",
+    "status": "active_client",
+    "tags": ["retirement", "income-focused", "conservative"],
+    "notes_count": 12,
+    "last_meeting": "2026-09-01"
+  },
+  {
+    "lead_id": "LEAD-1002",
+    "name": "Rajiv K. Mehta",
+    "first_name": "Rajiv",
+    "middle_name": "K",
+    "last_name": "Mehta",
+    "email": "rajiv.mehta@email.com",
+    "phone": "(425) 555-0283",
+    "address": {
+      "line1": "2891 Highland Dr",
+      "line2": null,
+      "city": "Bellevue",
+      "state": "WA",
+      "postal_code": "98004",
+      "country": "US"
+    },
+    "advisor_id": "ADV-SK-017",
+    "advisor_name": "Sarah Kim",
+    "created_at": "2026-08-28T09:45:00Z",
+    "last_updated": "2026-09-10T16:20:00Z",
+    "status": "prospect",
+    "tags": ["tech-professional", "wealth-accumulation", "high-earner"],
+    "notes_count": 1,
+    "last_meeting": "2026-09-10"
+  }
+]

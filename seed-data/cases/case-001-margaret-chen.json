@@ -1,0 +1,315 @@
+{
+  "case_id": "CASE-0001",
+  "created_at": "2026-09-02T09:14:00Z",
+  "updated_at": "2026-09-15T14:32:00Z",
+  "catalog_version": "nao-cat-2026.09.1",
+  "registration": "INDIVIDUAL",
+  "stage": "completed",
+  "status": "completed",
+  "assigned_to": "ADV-KP-042",
+  "lead_id": "LEAD-1001",
+
+  "values": {
+    "account.type": {
+      "value": "INDIVIDUAL",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-02T09:16:00Z"
+    },
+    "account.advisory_program": {
+      "value": "ADVISOR_DRIVEN",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-02T09:16:00Z"
+    },
+    "account.purpose": {
+      "value": "INCOME",
+      "state": "prefilled_confirmed",
+      "source": "crm.meeting_note",
+      "source_age_days": 1,
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-02T09:22:00Z"
+    },
+
+    "applicant.legal_name": {
+      "value": {
+        "first": "Margaret",
+        "middle": "A",
+        "last": "Chen",
+        "suffix": null
+      },
+      "state": "prefilled_confirmed",
+      "source": "crm.contact",
+      "source_age_days": 13,
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-02T09:18:00Z"
+    },
+    "applicant.date_of_birth": {
+      "value": "1964-03-15",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-02T09:20:00Z"
+    },
+    "applicant.tax_id": {
+      "value": "***-**-4821",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-02T09:20:00Z"
+    },
+    "applicant.citizenship_status": {
+      "value": "US_CITIZEN",
+      "state": "prefilled_confirmed",
+      "source": "crm.meeting_note",
+      "source_age_days": 1,
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-02T09:22:00Z"
+    },
+    "applicant.legal_address": {
+      "value": {
+        "line1": "4712 Barton Creek Blvd",
+        "line2": null,
+        "city": "Austin",
+        "state": "TX",
+        "postal_code": "78735",
+        "country": "US"
+      },
+      "state": "prefilled_confirmed",
+      "source": "crm.contact",
+      "source_age_days": 13,
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-02T09:18:00Z"
+    },
+    "applicant.email": {
+      "value": "margaret.chen@email.com",
+      "state": "prefilled_accepted",
+      "source": "crm.contact",
+      "source_age_days": 13
+    },
+    "applicant.mobile_phone": {
+      "value": "(512) 555-0147",
+      "state": "prefilled_accepted",
+      "source": "crm.contact",
+      "source_age_days": 13
+    },
+
+    "employment.status": {
+      "value": "RETIRED",
+      "state": "prefilled_accepted",
+      "source": "crm.meeting_note",
+      "source_age_days": 1
+    },
+    "employment.employer_name": {
+      "value": null,
+      "state": null,
+      "note": "Not applicable — employment.status is RETIRED"
+    },
+    "financial.annual_income": {
+      "value": "100K_250K",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-02T09:26:00Z"
+    },
+    "financial.liquid_net_worth": {
+      "value": "250K_1M",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-02T09:26:00Z"
+    },
+
+    "household.dependants": {
+      "value": 2,
+      "state": "extracted_confirmed",
+      "heard": "my two grown kids",
+      "confidence": 0.98,
+      "source": "conversation",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-02T09:28:00Z"
+    },
+    "household.minor_dependants": {
+      "value": 0,
+      "state": "extracted_confirmed",
+      "heard": "both adults now",
+      "confidence": 0.95,
+      "source": "conversation",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-02T09:28:00Z"
+    },
+
+    "profile.investment_objective": {
+      "value": "INCOME",
+      "state": "prefilled_confirmed",
+      "source": "crm.meeting_note",
+      "source_age_days": 7,
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-08T10:12:00Z"
+    },
+    "profile.risk_tolerance": {
+      "value": "CONSERVATIVE",
+      "state": "prefilled_confirmed",
+      "source": "crm.meeting_note",
+      "source_age_days": 7,
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-08T10:12:00Z"
+    },
+    "profile.time_horizon": {
+      "value": "5_10Y",
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-08T10:14:00Z"
+    },
+
+    "reg.finra_affiliation": {
+      "value": false,
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-08T10:16:00Z"
+    },
+    "reg.control_person": {
+      "value": false,
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-08T10:16:00Z"
+    },
+
+    "trusted_contact": {
+      "value": {
+        "name": "Linda Chen-Park",
+        "relationship": "Sister",
+        "phone": "(512) 555-0298",
+        "email": "linda.chenpark@email.com",
+        "declined": false
+      },
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-08T10:18:00Z"
+    },
+
+    "funding.method": {
+      "value": "ACAT_TRANSFER",
+      "state": "prefilled_confirmed",
+      "source": "crm.meeting_note",
+      "source_age_days": 11,
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-12T11:05:00Z"
+    },
+    "funding.initial_amount": {
+      "value": 325000,
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-12T11:06:00Z"
+    },
+    "funding.delivering_institution": {
+      "value": {
+        "institution_name": "Fidelity Investments",
+        "account_number": "***-***-8832",
+        "registration_type": "INDIVIDUAL",
+        "registration_id": "FID-IND-29847",
+        "transfer_scope": "FULL"
+      },
+      "state": "extracted_confirmed",
+      "heard": "values read from uploaded transfer statement, page 1",
+      "source": "upload.transfer-statement-fidelity.pdf#page=1",
+      "confidence": 0.92,
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-12T11:10:00Z",
+      "checks": [
+        { "rule": "acat_registration_match", "status": "pass", "detail": "INDIVIDUAL matches on both sides" }
+      ]
+    },
+
+    "disclosure.form_crs_ack": {
+      "value": true,
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-15T14:28:00Z"
+    },
+    "disclosure.advisory_agreement_ack": {
+      "value": true,
+      "state": "captured_direct",
+      "source": "advisor",
+      "confirmed_by": "ADV-KP-042",
+      "confirmed_at": "2026-09-15T14:30:00Z"
+    }
+  },
+
+  "repeating": {
+    "joint_owners": [],
+    "beneficiaries": [],
+    "entity_responsible_parties": []
+  },
+
+  "documents": [
+    {
+      "type": "GOV_ID_FRONT",
+      "filename": "margaret-chen-drivers-license-front.jpg",
+      "status": "accepted",
+      "uploaded_at": "2026-09-08T10:20:00Z",
+      "checks": ["readable", "not_expired", "name_match"]
+    },
+    {
+      "type": "GOV_ID_BACK",
+      "filename": "margaret-chen-drivers-license-back.jpg",
+      "status": "accepted",
+      "uploaded_at": "2026-09-08T10:21:00Z",
+      "checks": ["readable"]
+    },
+    {
+      "type": "TRANSFER_STATEMENT",
+      "filename": "transfer-statement-fidelity.pdf",
+      "status": "accepted",
+      "uploaded_at": "2026-09-12T11:00:00Z",
+      "checks": ["readable", "values_extracted"],
+      "extracted_fields": ["funding.delivering_institution"]
+    }
+  ],
+
+  "sections": {
+    "completed": [
+      "account_setup",
+      "applicant_identity",
+      "employment_finances",
+      "household",
+      "investment_profile",
+      "regulatory",
+      "trusted_contact",
+      "funding",
+      "disclosures"
+    ],
+    "open": [],
+    "not_started": [],
+    "not_applicable": [
+      "joint_owners",
+      "entity",
+      "beneficiaries"
+    ]
+  },
+
+  "submission": {
+    "can_submit": true,
+    "unconfirmed_count": 0,
+    "missing_required": [],
+    "blocking_documents": [],
+    "open_flags": []
+  },
+
+  "audit": {
+    "turns": 14,
+    "sessions": 3,
+    "first_session": "2026-09-02T09:14:00Z",
+    "last_session": "2026-09-15T14:32:00Z",
+    "model_version": "claude-sonnet-4-20250514",
+    "prompt_version": "intake-v3"
+  }
+}

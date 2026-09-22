@@ -1,0 +1,24 @@
+[
+  {
+    "note_id": "NOTE-2001",
+    "lead_id": "LEAD-1001",
+    "advisor_id": "ADV-KP-042",
+    "advisor_name": "Kevin Park",
+    "date": "2026-09-01",
+    "created_at": "2026-09-01T16:45:00Z",
+    "type": "meeting_note",
+    "source": "crm.meeting_note",
+    "content": "Catch-up with Margaret. She's ready to consolidate her retirement accounts into one place. Confirmed address is still Barton Creek — she's been there since 2018. Retired from Austin ISD three years ago after 30 years as a principal. Looking for steady income, doesn't want any surprises. Born and raised in Texas. Widowed in 2021 — this will be an individual account. Annual pension plus investment income runs about $180k. She's got around $600k liquid between the Fidelity account and savings. Wants to move everything over from Fidelity. Her sister Linda Chen-Park is her go-to emergency contact. No ties to FINRA or any public company boards. She just wants regular income from this and to keep things safe — can't afford big losses at this stage."
+  },
+  {
+    "note_id": "NOTE-2002",
+    "lead_id": "LEAD-1002",
+    "advisor_id": "ADV-SK-017",
+    "advisor_name": "Sarah Kim",
+    "date": "2026-09-10",
+    "created_at": "2026-09-10T17:30:00Z",
+    "type": "meeting_note",
+    "source": "crm.meeting_note",
+    "content": "Initial meeting with Rajiv Mehta. Product manager at Amazon, Bellevue office. US citizen. Been at Amazon about 5 years. Married to Ananya, she's a CPA. Interested in long-term wealth building, wants to grow their wealth over the long term. Comfortable with market volatility, Ananya keeps an eye on things. Household income well into the six figures. They've been saving aggressively and have a solid cushion — over a million liquid. Wants to start with about $150k via ACH from their checking account. No FINRA affiliations, not a control person."
+  }
+]
